@@ -1,0 +1,36 @@
+{
+  "games": [
+    {
+      "id": 1,
+      "title": "Pixel Runner",
+      "genre": "Platform",
+      "platform": "PC",
+      "price": 14.99,
+      "stock": 12
+    },
+    {
+      "id": 2,
+      "title": "Space Colony",
+      "genre": "Strategy",
+      "platform": "PC",
+      "price": 29.99,
+      "stock": 8
+    },
+    {
+      "id": 3,
+      "title": "Neon Racer",
+      "genre": "Racing",
+      "platform": "PlayStation",
+      "price": 39.99,
+      "stock": 5
+    },
+    {
+      "id": 4,
+      "title": "Dungeon Quest",
+      "genre": "RPG",
+      "platform": "PC",
+      "price": 24.99,
+      "stock": 15
+    }
+  ]
+}
