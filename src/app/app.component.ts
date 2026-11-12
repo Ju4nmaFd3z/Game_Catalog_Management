@@ -35,6 +35,7 @@ export class AppComponent implements OnInit {
 
   // Sin id se crea con POST y con id se actualiza con PUT
   saveGame(gameForm: NgForm): void {
+    // El botón no se bloquea, así que se filtra aquí si el formulario es inválido
     if (gameForm.invalid) {
       return;
     }

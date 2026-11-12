@@ -28,13 +28,13 @@ Una referencia al control de ese campo. Con ella se consulta su estado (`valid`,
 Un objeto con los errores de validación activos, por ejemplo `{ required: true }` o `{ minlength: {...} }`. Si el campo es válido, vale `null`.
 
 **10. ¿Por qué utilizamos normalmente invalid && (dirty || touched) para mostrar errores?**
-Para que no salgan errores nada más abrir el formulario. Solo se muestran cuando el campo es inválido y el usuario ya ha interactuado con él.
+Para que no salgan errores nada más abrir el formulario. Solo se muestran cuando el campo es inválido y el usuario ya ha interactuado con él. En esta versión también se muestran al pulsar el botón de guardar (`gameForm.submitted`), para avisar de todos los campos pendientes.
 
 **11. ¿Por qué los mensajes desaparecen automáticamente al corregir un dato?**
 Porque Angular recalcula la validación cada vez que cambia el valor. Cuando `errors` cambia, el `@if` se vuelve a evaluar y el mensaje deja de mostrarse.
 
 **12. ¿Por qué el botón puede habilitarse automáticamente cuando cambia el formulario?**
-Porque está enlazado con `[disabled]="gameForm.invalid"`. Cada vez que cambia el estado del formulario, Angular actualiza el botón sin que tengamos que hacer nada.
+Porque, si se enlaza con `[disabled]="gameForm.invalid"`, Angular recalcula `invalid` cada vez que cambia el formulario y actualiza el botón sin que tengamos que hacer nada. En esta versión no se bloquea el botón: se añade `novalidate` al formulario, los errores aparecen también al enviar y `saveGame()` filtra con `if (form.invalid) return` para no guardar datos inválidos.
 
 **13. ¿Qué ventaja tiene utilizar ngSubmit frente a escuchar únicamente el click de un botón?**
 `ngSubmit` se lanza al enviar el formulario, también cuando se pulsa Enter en un campo, y evita que la página se recargue. Con `click` solo se detecta el clic en ese botón.

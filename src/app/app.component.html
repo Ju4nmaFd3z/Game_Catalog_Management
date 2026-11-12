@@ -1,9 +1,10 @@
 <h1>Gestión de videojuegos</h1>
 
-<form #gameForm="ngForm" (ngSubmit)="saveGame(gameForm)">
+<form #gameForm="ngForm" (ngSubmit)="saveGame(gameForm)" novalidate>
 
   <div>
     <label for="title">Título</label>
+    @let invalidTitle = title.invalid && (title.touched || title.dirty || gameForm.submitted);
     <input
       type="text"
       id="title"
@@ -13,9 +14,9 @@
       minlength="3"
       maxlength="40"
       #title="ngModel"
-      [class.invalid-control]="title.invalid && (title.dirty || title.touched)"
+      [class.invalid-control]="invalidTitle"
     >
-    @if (title.invalid && (title.dirty || title.touched)) {
+    @if (invalidTitle) {
       @if (title.errors?.['required']) {
         <p class="error">El título es obligatorio.</p>
       }
@@ -30,13 +31,14 @@
 
   <div>
     <label for="genre">Género</label>
+    @let invalidGenre = genre.invalid && (genre.touched || gameForm.submitted);
     <select
       id="genre"
       name="genre"
       [(ngModel)]="game.genre"
       required
       #genre="ngModel"
-      [class.invalid-control]="genre.invalid && (genre.dirty || genre.touched)"
+      [class.invalid-control]="invalidGenre"
     >
       <option value="">Selecciona un género</option>
       <option value="Platform">Platform</option>
@@ -48,20 +50,21 @@
       <option value="Simulation">Simulation</option>
       <option value="Sports">Sports</option>
     </select>
-    @if (genre.invalid && genre.touched) {
+    @if (invalidGenre) {
       <p class="error">Debes seleccionar un género.</p>
     }
   </div>
 
   <div>
     <label for="platform">Plataforma</label>
+    @let invalidPlatform = platform.invalid && (platform.touched || gameForm.submitted);
     <select
       id="platform"
       name="platform"
       [(ngModel)]="game.platform"
       required
       #platform="ngModel"
-      [class.invalid-control]="platform.invalid && (platform.dirty || platform.touched)"
+      [class.invalid-control]="invalidPlatform"
     >
       <option value="">Selecciona una plataforma</option>
       <option value="PC">PC</option>
@@ -69,13 +72,14 @@
       <option value="Xbox">Xbox</option>
       <option value="Switch">Switch</option>
     </select>
-    @if (platform.invalid && platform.touched) {
+    @if (invalidPlatform) {
       <p class="error">Debes seleccionar una plataforma.</p>
     }
   </div>
 
   <div>
     <label for="price">Precio</label>
+    @let invalidPrice = price.invalid && (price.touched || price.dirty || gameForm.submitted);
     <input
       type="number"
       id="price"
@@ -85,9 +89,9 @@
       min="0.01"
       max="100"
       #price="ngModel"
-      [class.invalid-control]="price.invalid && (price.dirty || price.touched)"
+      [class.invalid-control]="invalidPrice"
     >
-    @if (price.invalid && (price.dirty || price.touched)) {
+    @if (invalidPrice) {
       @if (price.errors?.['required']) {
         <p class="error">Precio obligatorio.</p>
       }
@@ -102,6 +106,7 @@
 
   <div>
     <label for="stock">Stock</label>
+    @let invalidStock = stock.invalid && (stock.touched || stock.dirty || gameForm.submitted);
     <input
       type="number"
       id="stock"
@@ -111,9 +116,9 @@
       min="0"
       max="999"
       #stock="ngModel"
-      [class.invalid-control]="stock.invalid && (stock.dirty || stock.touched)"
+      [class.invalid-control]="invalidStock"
     >
-    @if (stock.invalid && (stock.dirty || stock.touched)) {
+    @if (invalidStock) {
       @if (stock.errors?.['required']) {
         <p class="error">El stock es obligatorio.</p>
       }
@@ -126,14 +131,14 @@
     }
   </div>
 
-  @if (gameForm.invalid && gameForm.dirty) {
+  @if (gameForm.invalid && (gameForm.dirty || gameForm.submitted)) {
     <p class="error">Existen campos pendientes de corregir.</p>
   }
   @if (gameForm.valid && gameForm.dirty) {
     <p class="ok">Formulario preparado para guardar.</p>
   }
 
-  <button type="submit" [disabled]="gameForm.invalid">
+  <button type="submit">
     @if (game.id) {
       Actualizar
     } @else {
