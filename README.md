@@ -1,6 +1,8 @@
 # Game Catalog
 
-Gestión de videojuegos con Angular, formularios Template-Driven y JSON Server 0.17.4. El formulario permite crear (POST) y editar (PUT) videojuegos, `GameService` hace las peticiones y `AppComponent` gestiona la interfaz.
+Gestión de videojuegos con Angular, formularios reactivos (Reactive Forms) y JSON Server 0.17.4. El formulario permite crear (POST) y editar (PUT) videojuegos, `GameService` hace las peticiones y `AppComponent` gestiona la interfaz.
+
+Este formulario se migró desde Template-Driven a Reactive Forms (ver [MIGRACION.md](./MIGRACION.md)).
 
 ## Ejecución
 
@@ -10,4 +12,5 @@ Gestión de videojuegos con Angular, formularios Template-Driven y JSON Server 0
 
 ## Respuestas a las cuestiones finales
 
-Consultar [RESPUESTAS.md](./RESPUESTAS.md).
+- Actividad anterior (Template-Driven): [RESPUESTAS.md](./RESPUESTAS.md).
+- Migración a Reactive Forms: [MIGRACION.md](./MIGRACION.md).
