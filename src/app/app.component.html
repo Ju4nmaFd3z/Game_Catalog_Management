@@ -1,29 +1,23 @@
 <h1>Gestión de videojuegos</h1>
 
-<form #gameForm="ngForm" (ngSubmit)="saveGame(gameForm)" novalidate>
+<form [formGroup]="gameFormGroup" #form="ngForm" (ngSubmit)="saveGame(form)" novalidate>
 
   <div>
     <label for="title">Título</label>
-    @let invalidTitle = title.invalid && (title.touched || title.dirty || gameForm.submitted);
+    @let title = gameFormGroup.controls.title;
+    @let invalidTitle = title.invalid && (title.touched || form.submitted);
     <input
       type="text"
       id="title"
-      name="title"
-      [(ngModel)]="game.title"
-      required
-      minlength="3"
-      maxlength="40"
-      #title="ngModel"
-      [class.invalid-control]="invalidTitle"
+      formControlName="title"
+      [class.invalid]="invalidTitle"
     >
     @if (invalidTitle) {
-      @if (title.errors?.['required']) {
+      @if (title.hasError('required')) {
         <p class="error">El título es obligatorio.</p>
-      }
-      @if (title.errors?.['minlength']) {
+      } @else if (title.hasError('minlength')) {
         <p class="error">El título debe tener al menos 3 caracteres.</p>
-      }
-      @if (title.errors?.['maxlength']) {
+      } @else if (title.hasError('maxlength')) {
         <p class="error">El título no puede superar los 40 caracteres.</p>
       }
     }
@@ -31,15 +25,9 @@
 
   <div>
     <label for="genre">Género</label>
-    @let invalidGenre = genre.invalid && (genre.touched || gameForm.submitted);
-    <select
-      id="genre"
-      name="genre"
-      [(ngModel)]="game.genre"
-      required
-      #genre="ngModel"
-      [class.invalid-control]="invalidGenre"
-    >
+    @let genre = gameFormGroup.controls.genre;
+    @let invalidGenre = genre.invalid && (genre.touched || form.submitted);
+    <select id="genre" formControlName="genre" [class.invalid]="invalidGenre">
       <option value="">Selecciona un género</option>
       <option value="Platform">Platform</option>
       <option value="Strategy">Strategy</option>
@@ -57,15 +45,9 @@
 
   <div>
     <label for="platform">Plataforma</label>
-    @let invalidPlatform = platform.invalid && (platform.touched || gameForm.submitted);
-    <select
-      id="platform"
-      name="platform"
-      [(ngModel)]="game.platform"
-      required
-      #platform="ngModel"
-      [class.invalid-control]="invalidPlatform"
-    >
+    @let platform = gameFormGroup.controls.platform;
+    @let invalidPlatform = platform.invalid && (platform.touched || form.submitted);
+    <select id="platform" formControlName="platform" [class.invalid]="invalidPlatform">
       <option value="">Selecciona una plataforma</option>
       <option value="PC">PC</option>
       <option value="PlayStation">PlayStation</option>
@@ -79,26 +61,20 @@
 
   <div>
     <label for="price">Precio</label>
-    @let invalidPrice = price.invalid && (price.touched || price.dirty || gameForm.submitted);
+    @let price = gameFormGroup.controls.price;
+    @let invalidPrice = price.invalid && (price.touched || form.submitted);
     <input
       type="number"
       id="price"
-      name="price"
-      [(ngModel)]="game.price"
-      required
-      min="0.01"
-      max="100"
-      #price="ngModel"
-      [class.invalid-control]="invalidPrice"
+      formControlName="price"
+      [class.invalid]="invalidPrice"
     >
     @if (invalidPrice) {
-      @if (price.errors?.['required']) {
+      @if (price.hasError('required')) {
         <p class="error">Precio obligatorio.</p>
-      }
-      @if (price.errors?.['min']) {
+      } @else if (price.hasError('min')) {
         <p class="error">El precio debe ser superior a 0.</p>
-      }
-      @if (price.errors?.['max']) {
+      } @else if (price.hasError('max')) {
         <p class="error">El precio no puede superar 100 €.</p>
       }
     }
@@ -106,46 +82,45 @@
 
   <div>
     <label for="stock">Stock</label>
-    @let invalidStock = stock.invalid && (stock.touched || stock.dirty || gameForm.submitted);
+    @let stock = gameFormGroup.controls.stock;
+    @let invalidStock = stock.invalid && (stock.touched || form.submitted);
     <input
       type="number"
       id="stock"
-      name="stock"
-      [(ngModel)]="game.stock"
-      required
-      min="0"
-      max="999"
-      #stock="ngModel"
-      [class.invalid-control]="invalidStock"
+      formControlName="stock"
+      [class.invalid]="invalidStock"
     >
     @if (invalidStock) {
-      @if (stock.errors?.['required']) {
+      @if (stock.hasError('required')) {
         <p class="error">El stock es obligatorio.</p>
-      }
-      @if (stock.errors?.['min']) {
+      } @else if (stock.hasError('min')) {
         <p class="error">El stock no puede ser negativo.</p>
-      }
-      @if (stock.errors?.['max']) {
+      } @else if (stock.hasError('max')) {
         <p class="error">El stock no puede superar 999.</p>
+      } @else if (stock.hasError('pattern')) {
+        <p class="error">El stock debe ser un número entero.</p>
       }
     }
   </div>
 
-  @if (gameForm.invalid && (gameForm.dirty || gameForm.submitted)) {
+  @if (gameFormGroup.invalid && (gameFormGroup.dirty || form.submitted)) {
     <p class="error">Existen campos pendientes de corregir.</p>
   }
-  @if (gameForm.valid && gameForm.dirty) {
+  @if (gameFormGroup.valid && gameFormGroup.dirty) {
     <p class="ok">Formulario preparado para guardar.</p>
+  }
+  @if (message) {
+    <p [class.error]="saveFailed" [class.ok]="!saveFailed">{{ message }}</p>
   }
 
   <button type="submit">
-    @if (game.id) {
+    @if (editingId) {
       Actualizar
     } @else {
-      Crear
+      Guardar videojuego
     }
   </button>
-  <button type="button" (click)="cancelEdit(gameForm)">Cancelar</button>
+  <button type="button" (click)="clearForm(form)">Limpiar</button>
 
 </form>
 
@@ -154,6 +129,6 @@
 @for (game of games; track game.id) {
   <div class="game">
     <span>{{ game.title }} · {{ game.genre }} · {{ game.platform }} · {{ game.price }} € · Stock {{ game.stock }}</span>
-    <button type="button" (click)="editGame(game)">Editar</button>
+    <button type="button" (click)="editGame(game, form)">Editar</button>
   </div>
 }

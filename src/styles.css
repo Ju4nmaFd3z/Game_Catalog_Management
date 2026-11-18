@@ -2,3 +2,13 @@ body {
   font-family: sans-serif;
   margin: 1rem;
 }
+
+input.invalid, select.invalid, textarea.invalid {
+  border: 2px solid #bf4040;
+}
+
+.error {
+  color: #a52e2e;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
